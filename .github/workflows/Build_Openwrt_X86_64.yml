@@ -73,7 +73,7 @@ jobs:
 
       - name: Run Diy-Part1 Scripts
         run: |
-          source scripts/Init.sh
+          source Scripts/Init.sh
           Diy-Part1
           echo "Artifacts_DATE=$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
 
