@@ -12,7 +12,7 @@ Diy-Part1() {
     
     mv -f  Customize/Upgradesystemx86_64 $GITHUB_WORKSPACE/openwrt/package/base-files/files/bin/Upgradesystem
     chmod +x $GITHUB_WORKSPACE/openwrt/package/base-files/files/bin/Upgradesystem
-    Core_x86_64
+    Core_X86_64
     Date=`date "+%Y/%m/%d"`
     mkdir -p $GITHUB_WORKSPACE/openwrt/package/base-files/files/etc/config > /dev/null 2>1
     cd $GITHUB_WORKSPACE
