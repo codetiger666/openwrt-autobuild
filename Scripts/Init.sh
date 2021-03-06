@@ -41,12 +41,12 @@ Diy-Part1() {
     if [ "$INCLUDE_SmartDNS" == "true" ]; then
         cd $GITHUB_WORKSPACE/openwrt/package/CodeTiger
         git clone https://github.com/pymumu/luci-app-smartdns.git
-        /usr/bin/cp Customize/smartdns $GITHUB_WORKSPACE/openwrt/package/base-files/files/etc/config
+        /usr/bin/cp $GITHUB_WORKSPACE/Customize/smartdns $GITHUB_WORKSPACE/openwrt/package/base-files/files/etc/config
     fi
     if [ "$INCLUDE_Passwall" == "true" ]; then
         cd $GITHUB_WORKSPACE/openwrt/package/CodeTiger
         git clone https://github.com/xiaorouji/openwrt-passwall.git -b main
-        /usr/bin/cp Customize/passwall $GITHUB_WORKSPACE/openwrt/package/base-files/files/etc/config
+        /usr/bin/cp $GITHUB_WORKSPACE/Customize/passwall $GITHUB_WORKSPACE/openwrt/package/base-files/files/etc/config
     fi
     if [ "$INCLUDE_VSSR" == "true" ]; then
         cd $GITHUB_WORKSPACE/openwrt/package/CodeTiger
