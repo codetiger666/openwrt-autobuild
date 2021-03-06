@@ -1,0 +1,113 @@
+
+config smartdns
+	option server_name 'smartdns'
+	option tcp_server '1'
+	option dualstack_ip_selection '0'
+	option serve_expired '0'
+	option redirect 'none'
+	option rr_ttl_min '300'
+	option seconddns_port '6553'
+	option seconddns_tcp_server '1'
+	option seconddns_no_speed_check '0'
+	option seconddns_no_rule_addr '0'
+	option seconddns_no_rule_nameserver '0'
+	option seconddns_no_rule_ipset '0'
+	option seconddns_no_rule_soa '0'
+	option seconddns_no_dualstack_selection '0'
+	option seconddns_no_cache '0'
+	option force_aaaa_soa '0'
+	option port '5353'
+	option ipv6_server '0'
+	option prefetch_domain '1'
+	option rr_ttl '300'
+	option cache_size '1000000'
+	option enabled '1'
+	option coredump '1'
+	list old_redirect 'none'
+	list old_port '5353'
+	list old_enabled '1'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '8.8.8.8'
+	option type 'tcp'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '8.8.8.8'
+	option type 'udp'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip 'https://8.8.8.8/dns-query'
+	option type 'https'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '8.8.8.8'
+	option type 'tls'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '8.8.4.4'
+	option type 'tcp'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '8.8.4.4'
+	option type 'udp'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip 'https://8.8.4.4/dns-query'
+	option type 'https'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '8.8.4.4'
+	option type 'tls'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '1.1.1.1'
+	option type 'tcp'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '1.1.1.1'
+	option type 'udp'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip 'https://1.1.1.1/dns-query'
+	option type 'https'
+	option blacklist_ip '0'
+
+config server
+	option enabled '1'
+	option name 'google'
+	option ip '1.1.1.1'
+	option type 'tls'
+	option blacklist_ip '0'
+
