@@ -62,6 +62,7 @@ jobs:
 
       - name: init
         run: | 
+          mkdir -p /github/home/.ssh/
           yum install openssh -y
 
       - name: SSH connection to Actions
