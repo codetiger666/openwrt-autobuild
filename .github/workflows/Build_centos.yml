@@ -61,7 +61,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}      
 
-      -name: build centos image
+      - name: build centos image
         run: |
           image=`docker run --privileged=true -itd -v /opt/rpmbuild:/root/rpmbuild centos:7 /bin/bash`
           docker exec -it $image bash
