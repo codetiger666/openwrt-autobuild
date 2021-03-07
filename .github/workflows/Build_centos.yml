@@ -39,8 +39,8 @@ jobs:
     container:
       image: centos:7
       # volumes:
-      #   - /opt/rpmbuild:/root/rpmbuild
-      # options: --init /root/rpmbuild/test
+      #   - /opt/rpmbuild:/github/home/rpmbuild
+      # options: --init /github/home/rpmbuild/test
 
     # define steps
     steps:
@@ -79,8 +79,8 @@ jobs:
           rpmdev-setuptree
           cd /opt
           git clone https://github.com/nieningproj/openwrt-autobuild.git
-          /usr/bin/cp /opt/openwrt-autobuild/Customize/.rpmmacros /root
-          cd /root/rpmbuild
+          /usr/bin/cp /opt/openwrt-autobuild/Customize/.rpmmacros /github/home
+          cd /github/home/rpmbuild
           cp /opt/openwrt-autobuild/yumbuild/nginx/nginx.spec SPECS/
           cp /opt/openwrt-autobuild/yumbuild/nginx/nginx* SOURCES/
           cp /opt/openwrt-autobuild/yumbuild/nginx/default.conf SOURCES/
@@ -89,9 +89,6 @@ jobs:
           cd ../SPECS
           sed -i "s/version11/$Nginx_version/g" nginx.spec
           rpmbuild -ba nginx.spec
-          # docker pull centos:7
-          # image=`docker run --privileged=true -itd -v /opt/rpmbuild:/root/rpmbuild centos:7 /bin/bash`
-          # docker exec -it $image bash
           
 
       - name: Upload Firmware to Artifacts
@@ -99,7 +96,7 @@ jobs:
         if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         with:
           name: nginx_centos7
-          path: /root/rpmbuild/RPMS
+          path: /github/home/rpmbuild/RPMS
     
 
       - name: Upload Firmware to Releases
@@ -109,7 +106,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           tag_name: centos7_nginx
-          files: /root/rpmbuild/RPMS/x86_64/*
+          files: /github/home/rpmbuild/RPMS/x86_64/*
 
           
       - name: Remove old Releases
