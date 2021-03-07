@@ -1,0 +1,14 @@
+[Unit]
+Description=nginx
+Documentation=http://nginx.org/en/docs/
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+ExecStart=/sbin/nginx
+ExecReload=/sbin/nginx -s reload
+ExecStop=/sbin/nginx -s stop
+PIDFile=/var/run/nginx.pid
+
+[Install]
+WantedBy=multi-user.target
