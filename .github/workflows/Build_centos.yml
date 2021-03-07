@@ -13,10 +13,10 @@ on:
         required: true
         default: 'false'
 
-  schedule:
-    - cron: 0 10 * * *
-  #push:
-  #  branches: [ main ]
+  # schedule:
+  #   - cron: 0 10 * * *
+  push:
+   branches: [ main ]
   # pull_request:
   #   branches: [ main ]
 
@@ -29,7 +29,7 @@ env:
   UPLOAD_BIN_DIR: false
   REMOVE_OLD_RELEASE: true
   REMOVE_WORKFLOW_RUNS: true
-  Nginx_version: 1.19.
+  Nginx_version: 1.19.3.1
 
 # define workflow
 jobs:
@@ -65,12 +65,8 @@ jobs:
         run: |
           image=`docker run --privileged=true -itd -v /opt/rpmbuild:/root/rpmbuild centos:7 /bin/bash`
           docker exec -it $image bash
-          yum install wget -y
-          cd /etc/yum.repos.d/
-          rm -rf ./*
-          wget https://git.gybyt.cn:444/niening/linuxscripts/raw/branch/master/scripts/linux/centos/centos.repo
-          yum install perl-devel perl-ExtUtils-Embed gd-devel perl pcre-devel openssl-devel gcc gd \
-          libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel git  rpm-build rpmdevtools make -y
+          yum install wget perl-devel perl-ExtUtils-Embed gd-devel perl pcre-devel openssl-devel gcc gd \
+          libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel git rpm-build rpmdevtools make -y
           rpmdev-setuptree
           cd /opt
           git clone https://github.com/nieningproj/openwrt-autobuild.git
