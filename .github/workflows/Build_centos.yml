@@ -63,6 +63,7 @@ jobs:
 
       - name: build centos image
         run: |
+          docker pull centos:7
           image=`docker run --privileged=true -itd -v /opt/rpmbuild:/root/rpmbuild centos:7 /bin/bash`
           docker exec -it $image bash
           yum install wget perl-devel perl-ExtUtils-Embed gd-devel perl pcre-devel openssl-devel gcc gd \
@@ -103,7 +104,7 @@ jobs:
         uses: dev-drprasad/delete-older-releases@v0.1.0
         if: env.REMOVE_OLD_RELEASE == 'true' && !cancelled()
         with:
-          keep_latest: 3
+          keep_latest: 1
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
