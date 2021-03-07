@@ -29,6 +29,7 @@ env:
   UPLOAD_BIN_DIR: false
   REMOVE_OLD_RELEASE: true
   REMOVE_WORKFLOW_RUNS: true
+  Nginx_version: 1.19.
 
 # define workflow
 jobs:
@@ -48,39 +49,49 @@ jobs:
           sudo rm -rf /etc/localtime
           sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
           sudo apt remove php* dotnet* google* 
-          docker rmi `docker images -q`
           sudo rm -rf \
             /usr/share/dotnet \
             /etc/mysql \
             /etc/php
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
-          sudo -E apt-get clean
-          sudo -E apt-get -y autoremove --purge
-          cd
-          echo "export DRIVE_LABLE=$DRIVE_LABLE" >> .profile
-          source .profile
 
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
-        # if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
         env:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}      
 
+      -name: build centos image
+        run: |
+          image=`docker run --privileged=true -itd -v /opt/rpmbuild:/root/rpmbuild centos:7 /bin/bash`
+          docker exec -it $image bash
+          yum install wget -y
+          cd /etc/yum.repos.d/
+          rm -rf ./*
+          wget https://git.gybyt.cn:444/niening/linuxscripts/raw/branch/master/scripts/linux/centos/centos.repo
+          yum install perl-devel perl-ExtUtils-Embed gd-devel perl pcre-devel openssl-devel gcc gd \
+          libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel git  rpm-build rpmdevtools make -y
+          rpmdev-setuptree
+          cd /opt
+          git clone https://github.com/nieningproj/openwrt-autobuild.git
+          /usr/bin/cp /opt/openwrt-autobuild/Customize/.rpmmacros /root
+          cd /root/rpmbuild
+          cp /opt/openwrt-autobuild/yumbuild/nginx/nginx.spec SPECS/
+          cp /opt/openwrt-autobuild/yumbuild/nginx/nginx* SOURCES/
+          cp /opt/openwrt-autobuild/yumbuild/nginx/default.conf SOURCES/
+          cd SOURCES
+          wget https://openresty.org/download/openresty-$Nginx_version.tar.gz
+          cd ../SPECS
+          sed -i "s/version11/$Nginx_version/g" nginx.spec
+          rpmbuild -ba nginx.spec
 
       - name: Upload Firmware to Artifacts
         uses: actions/upload-artifact@main
         if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         with:
-          name: OpenWrt_Firmware_${{ env.Artifacts_DATE }}
-          path: openwrt/bin
-          
-      - name: copy file to Releases
-        working-directory: ./openwrt
-        run: |
-          source ../Scripts/Init.sh
-          Diy-Part2_x86_64
+          name: nginx_centos7
+          path: /opt/rpmbuild/RPMS
+    
 
       - name: Upload Firmware to Releases
         uses: softprops/action-gh-release@v1
@@ -88,8 +99,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
-          tag_name: x86_64
-          files: openwrt/bin/Firmware/*
+          tag_name: centos7_nginx
+          files: /opt/rpmbuild/RPMS/x86_64/*
 
           
       - name: Remove old Releases
