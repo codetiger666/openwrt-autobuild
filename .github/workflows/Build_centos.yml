@@ -60,7 +60,7 @@ jobs:
       #       /etc/mysql \
       #       /etc/php
 
-      -name: init
+      - name: init
         run: | 
           yum install openssh -y
 
