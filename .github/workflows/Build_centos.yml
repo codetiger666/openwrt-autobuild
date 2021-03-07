@@ -38,8 +38,8 @@ jobs:
 
     container:
       image: centos:7
-      volumes:
-        - /opt/rpmbuild:/root/rpmbuild
+      # volumes:
+      #   - /opt/rpmbuild:/root/rpmbuild
       # options: --init /root/rpmbuild/test
 
     # define steps
@@ -99,7 +99,7 @@ jobs:
         if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         with:
           name: nginx_centos7
-          path: /opt/rpmbuild/RPMS
+          path: /root/rpmbuild/RPMS
     
 
       - name: Upload Firmware to Releases
@@ -109,7 +109,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           tag_name: centos7_nginx
-          files: /opt/rpmbuild/RPMS/x86_64/*
+          files: /root/rpmbuild/RPMS/x86_64/*
 
           
       - name: Remove old Releases
